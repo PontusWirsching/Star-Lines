@@ -1,12 +1,13 @@
 package pontus.starlines;
 
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
+
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.game.Game;
 import pontus.starlines.menu.Menu;
-
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
+import pontus.starlines.prepare.LevelSelection;
 
 
 public class JustDont implements ApplicationListener {
@@ -22,8 +23,9 @@ public class JustDont implements ApplicationListener {
 		
 		ScreenManager.add(new Game());
 		ScreenManager.add(new Menu());
+		ScreenManager.add(new LevelSelection());
 
-		ScreenManager.setSelected("MENU");
+		ScreenManager.setSelected("LEVEL_SELECTION");
 		
 		Gdx.input.setInputProcessor(new Input());
 	}
