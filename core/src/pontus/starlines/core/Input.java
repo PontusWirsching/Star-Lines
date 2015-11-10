@@ -16,7 +16,7 @@ import com.badlogic.gdx.math.Vector3;
 public class Input implements InputProcessor {
 
 	static float x, y;
-	static float downAtX, downAtY;
+	public static float downAtX, downAtY;
 
 	static boolean touched = false;
 

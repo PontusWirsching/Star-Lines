@@ -5,11 +5,13 @@ import java.util.ArrayList;
 import pontus.starlines.JustDont;
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.Screen;
+import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.core.math.Line;
 import pontus.starlines.core.math.Point;
 import pontus.starlines.core.math.Util;
 import pontus.starlines.game.level.LevelHandler;
 import pontus.starlines.game.level.levels.Level001;
+import pontus.starlines.game.level.levels.Level002;
 import pontus.starlines.game.particles.ParticleHandler;
 import pontus.starlines.game.particles.StarSplash;
 import pontus.starlines.game.particles.Trail;
@@ -17,6 +19,8 @@ import pontus.starlines.game.particles.Trail;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Polygon;
@@ -25,11 +29,17 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Game extends Screen {
 
+	public static BitmapFont font = new BitmapFont(Gdx.files.internal("test.bmf"), Gdx.files.internal("test_00.png"), false);
+
+	
 	public Game() {
 		super("GAME");
 
-		LevelHandler.addLevel(new Level001());
-
+		LevelHandler.addLevel(new Level001(), new Point(0, 0), 0);
+		LevelHandler.addLevel(new Level002(), new Point(1, 0), 0);
+		
+		LevelHandler.selected = 1;
+		
 		cursorX = LevelHandler.getSelected().cursorX;
 		cursorY = LevelHandler.getSelected().cursorY;
 
@@ -51,6 +61,10 @@ public class Game extends Screen {
 
 	public boolean win = false;
 
+	public float fadeTimer = 1;
+
+	public boolean didTouchInRectangle = false;
+	
 	@Override
 	public void render(float delta) {
 		super.render(delta);
@@ -86,7 +100,7 @@ public class Game extends Screen {
 				int w = 10;
 				line((float) wall.getX1(), (float) wall.getY1(), (float) wall.getX2(), (float) wall.getY2(), w);
 			}
-			
+
 			setColor(Colors.STAR, Colors.STAR_SHADOW);
 			for (int i = 0; i < LevelHandler.getSelected().stars.length; i++) {
 				Point p = LevelHandler.getSelected().stars[i];
@@ -115,15 +129,13 @@ public class Game extends Screen {
 			} else {
 				circle(c.x, c.y, c.radius);
 			}
-			
-			
-			
+
 			ParticleHandler.render(sr, delta);
 
 			float ix = Input.getX();
 			float iy = Input.getY();
 
-			if (!dead && canMove && !win) if (Input.isTouched()) {
+			if (!dead && canMove && !win) if (didTouchInRectangle && Input.isTouched()) {
 				Vector2 v = new Vector2(ix - cursorX, iy - cursorY);
 				float angle = v.angle();
 
@@ -168,13 +180,29 @@ public class Game extends Screen {
 				}
 			}
 
-			if (!dead && !win) if (!r.contains(Input.getTouchedDownX(), Input.getTouchedDownY())) {
+			if (!canMove) {
+				Input.downAtX = 0;
+				Input.downAtY = 0;
+//				System.out.println("SHIT");
+			}
+			
+			if (!canMove && !dead && !win) if (!r.contains(Input.getTouchedDownX(), Input.getTouchedDownY())) {
 				cursorX = LevelHandler.getSelected().cursorX;
 				cursorY = LevelHandler.getSelected().cursorY;
+			}
+			
+			if (!dead && canMove && !win && r.contains(Input.getTouchedDownX(), Input.getTouchedDownY())) {
+				didTouchInRectangle = true;
 			}
 
 			ParticleHandler.spawn(new Trail(cursorX, cursorY));
 
+			sr.end();
+			
+			LevelHandler.getSelected().render(sb, delta);
+			
+			sr.begin(ShapeType.Filled);
+			
 			sr.setColor(Colors.OUT_OF_SCREEN);
 			sr.rect(-camera.viewportWidth / 2, -camera.viewportHeight / 2, camera.viewportWidth / 2 - JustDont.WIDTH / 2, camera.viewportHeight);
 			sr.rect(JustDont.WIDTH / 2, -camera.viewportHeight / 2, camera.viewportWidth / 2 - JustDont.WIDTH / 2, camera.viewportHeight);
@@ -212,6 +240,44 @@ public class Game extends Screen {
 					if (stars > 2) setColor(Colors.STAR, Colors.STAR_SHADOW);
 					else setColor(Colors.STAR_GRAY, Colors.STAR_GRAY_SHADOW);
 					star(150 + starY * 2 - 200, 100, 100);
+
+					// starY = camera.viewportHeight / 1.5f;
+					float time = 1;
+					float t = 10;
+
+					float s = 100 * (time);
+					float px = -s / 2.5f - starY + 200;
+					float py = -200;
+					if (s > 0) {
+						setColor(Color.WHITE, Color.GRAY);
+						line(px, py + s / 2, px + s, py, t);
+						line(px, py + s / 2, px, py - s / 2, t);
+						line(px, py - s / 2, px + s, py, t);
+						sr.triangle(px, py + s / 2, px + s, py, px, py - s / 2);
+
+					}
+					
+					float bs = 75;
+					float bx = starY - 200;
+					float by = -200;
+					t = 25;
+					
+					line(bx + bs / 2, by - bs / 2, bx - bs / 2, by - bs / 2, t);
+					line(bx + bs / 2, by + bs / 2, bx - bs / 2, by + bs / 2, t);
+
+
+					
+					
+					
+					if (Input.isTouched()) {
+						if (Util.getDistance(px + s / 4, py, Input.getX(), Input.getY()) < s) {
+							back = true;
+						}
+						if (Util.getDistance(bx, by, Input.getX(), Input.getY()) < bs) {
+							back = true;
+							menu = true;
+						}
+					}
 
 				}
 
@@ -261,14 +327,72 @@ public class Game extends Screen {
 
 		}
 		sr.end();
+		
+		sb.begin();
+		
+		{
+			font.setColor(Color.WHITE);
+			font.getData().setScale(1);
+			GlyphLayout l = new GlyphLayout();
+			l.setText(Game.font, LevelHandler.getSelected().name);
+			font.draw(sb, LevelHandler.getSelected().name, -l.width / 2, 350 + starY - 100);
+		}
+		
+		sb.end();
+		
+
+		if (back) {
+			fadeTimer += delta;
+			if (fadeTimer >= 1) {
+				fadeTimer = 1;
+				back = false;
+				resetAll();
+				win = false;
+				stars = 0;
+				showTimer = 0;
+				show = true;
+				wallAlpha = 1;
+				cursorX = LevelHandler.getSelected().cursorX;
+				cursorY = LevelHandler.getSelected().cursorY;
+				starY = camera.viewportHeight / 1.5f;
+				LevelHandler.getSelected().finnish.radius = LevelHandler.getSelected().originalFinnishRadius;
+				canMove = false;
+				if (LevelHandler.selected < LevelHandler.levels.size() - 1) LevelHandler.selected++;
+				else ScreenManager.setSelected("MENU");
+				
+				System.out.println(menu);
+				
+				if (menu) ScreenManager.setSelected("LEVEL_SELECTION");
+				menu = false;
+			}
+		} else {
+			fadeTimer -= delta;
+			if (fadeTimer <= 0) {
+				fadeTimer = 0;
+			}
+		}
+
+
+		Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+		Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+		sr.begin(ShapeType.Filled);
+		sr.setColor(new Color(Color.BLACK.r, Color.BLACK.g, Color.BLACK.b, fadeTimer));
+		sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
+		sr.end();
+		Gdx.gl.glDisable(GL20.GL_BLEND);
 
 	}
 
+	public boolean back = false;
+
+	public boolean menu = false;
+	
 	public void resetAll() {
 		stars = 0;
 		LevelHandler.getSelected().reset();
+		didTouchInRectangle = false;
 	}
-	
+
 	float starY = camera.viewportHeight / 1.5f;
 
 	private float s = 1;
