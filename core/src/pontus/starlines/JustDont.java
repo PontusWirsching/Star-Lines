@@ -25,7 +25,7 @@ public class JustDont implements ApplicationListener {
 		ScreenManager.add(new Menu());
 		ScreenManager.add(new LevelSelection());
 
-		ScreenManager.setSelected("LEVEL_SELECTION");
+		ScreenManager.setSelected("GAME");
 		
 		Gdx.input.setInputProcessor(new Input());
 	}

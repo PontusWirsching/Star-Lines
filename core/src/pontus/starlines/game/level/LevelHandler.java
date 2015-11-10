@@ -2,14 +2,19 @@ package pontus.starlines.game.level;
 
 import java.util.ArrayList;
 
+import pontus.starlines.core.math.Point;
+import pontus.starlines.prepare.LevelSelection;
+
 public class LevelHandler {
 
 	public static ArrayList<Level> levels = new ArrayList<Level>();
 	
 	public static int selected = 0;
 	
-	public static void addLevel(Level l) {
+	public static void addLevel(Level l, Point position, int page) {
 		levels.add(l);
+		int[][][] ll = LevelSelection.levels;
+		ll[page][(int) position.x][(int) position.y] = 1;
 	}
 	
 	public static Level get(int index) {
