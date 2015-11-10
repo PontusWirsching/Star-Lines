@@ -2,20 +2,6 @@ package pontus.starlines.game;
 
 import java.util.ArrayList;
 
-import pontus.starlines.JustDont;
-import pontus.starlines.core.Input;
-import pontus.starlines.core.graphics.Screen;
-import pontus.starlines.core.graphics.ScreenManager;
-import pontus.starlines.core.math.Line;
-import pontus.starlines.core.math.Point;
-import pontus.starlines.core.math.Util;
-import pontus.starlines.game.level.LevelHandler;
-import pontus.starlines.game.level.levels.Level001;
-import pontus.starlines.game.level.levels.Level002;
-import pontus.starlines.game.particles.ParticleHandler;
-import pontus.starlines.game.particles.StarSplash;
-import pontus.starlines.game.particles.Trail;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +13,23 @@ import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
+import pontus.starlines.JustDont;
+import pontus.starlines.core.Input;
+import pontus.starlines.core.graphics.Screen;
+import pontus.starlines.core.graphics.ScreenManager;
+import pontus.starlines.core.math.Line;
+import pontus.starlines.core.math.Point;
+import pontus.starlines.core.math.Util;
+import pontus.starlines.game.level.LevelHandler;
+import pontus.starlines.game.level.levels.Level001;
+import pontus.starlines.game.level.levels.Level002;
+import pontus.starlines.game.level.levels.Level003;
+import pontus.starlines.game.level.levels.Level004;
+import pontus.starlines.game.level.levels.Level005;
+import pontus.starlines.game.particles.ParticleHandler;
+import pontus.starlines.game.particles.StarSplash;
+import pontus.starlines.game.particles.Trail;
+
 public class Game extends Screen {
 
 	public static BitmapFont font = new BitmapFont(Gdx.files.internal("test.bmf"), Gdx.files.internal("test_00.png"), false);
@@ -37,8 +40,12 @@ public class Game extends Screen {
 
 		LevelHandler.addLevel(new Level001(), new Point(0, 0), 0);
 		LevelHandler.addLevel(new Level002(), new Point(1, 0), 0);
-		
-		LevelHandler.selected = 1;
+		LevelHandler.addLevel(new Level003(), new Point(2, 0), 0);
+		LevelHandler.addLevel(new Level004(), new Point(3, 0), 0);
+		LevelHandler.addLevel(new Level005(), new Point(0, 1), 0);
+
+
+		LevelHandler.selected = 4;
 		
 		cursorX = LevelHandler.getSelected().cursorX;
 		cursorY = LevelHandler.getSelected().cursorY;
@@ -74,9 +81,9 @@ public class Game extends Screen {
 		Gdx.gl.glClearColor(Colors.OUT_OF_SCREEN.r, Colors.OUT_OF_SCREEN.g, Colors.OUT_OF_SCREEN.b, Colors.OUT_OF_SCREEN.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		sr.begin(ShapeType.Filled);
+		sr.begin(ShapeType.Line);
 		{
-			sr.setColor(Colors.BACKGROUND);
+			sr.setColor(Color.BLACK);
 			sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
 
 			ArrayList<Line> walls = LevelHandler.getSelected().walls;
@@ -87,8 +94,10 @@ public class Game extends Screen {
 				show = false;
 			}
 
+			canMove = true;
+			
 			if (!show) {
-				wallAlpha -= delta * 2;
+//				wallAlpha -= delta * 2;
 				if (wallAlpha <= 0) {
 					wallAlpha = 0;
 					canMove = true;
@@ -146,8 +155,9 @@ public class Game extends Screen {
 					for (Line wall : walls) {
 
 						sr.setColor(Color.YELLOW);
-						float[] f = new float[] { (float) wall.getX1(), (float) wall.getY1() - 5, (float) wall.getX1(), (float) wall.getY1() + 5, (float) wall.getX2(), (float) wall.getY2() + 5, (float) wall.getX2(), (float) wall.getY2() - 5 };
+						float[] f = new float[] { (float) wall.getX1() + 5, (float) wall.getY1() - 5, (float) wall.getX1() - 5, (float) wall.getY1() + 5, (float) wall.getX2(), (float) wall.getY2() + 5, (float) wall.getX2() + 5, (float) wall.getY2() + 5 };
 						Polygon p = new Polygon(f);
+						sr.polygon(f);
 						if (p.contains(cursorX, cursorY)) {
 							collision = true;
 						}
@@ -257,13 +267,16 @@ public class Game extends Screen {
 
 					}
 					
-					float bs = 75;
+					float bw = 75;
+					float bh = 75;
+
 					float bx = starY - 200;
 					float by = -200;
-					t = 25;
-					
-					line(bx + bs / 2, by - bs / 2, bx - bs / 2, by - bs / 2, t);
-					line(bx + bs / 2, by + bs / 2, bx - bs / 2, by + bs / 2, t);
+					t = 15;
+
+					line(bx + bw / 2, by - bh / 2, bx - bw / 2, by - bh / 2, t);
+					line(bx + bw / 2, by, bx - bw / 2, by, t);
+					line(bx + bw / 2, by + bh / 2, bx - bw / 2, by + bh / 2, t);
 
 
 					
@@ -273,7 +286,7 @@ public class Game extends Screen {
 						if (Util.getDistance(px + s / 4, py, Input.getX(), Input.getY()) < s) {
 							back = true;
 						}
-						if (Util.getDistance(bx, by, Input.getX(), Input.getY()) < bs) {
+						if (Util.getDistance(bx, by, Input.getX(), Input.getY()) < bw) {
 							back = true;
 							menu = true;
 						}
