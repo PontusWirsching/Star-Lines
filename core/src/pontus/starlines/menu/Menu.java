@@ -192,10 +192,10 @@ public class Menu extends Screen {
 //		float fbs = 50;
 //		sb.draw(facebook, fbx - fbs, fby - fbs, fbs * 2, fbs * 2);
 
-		float gmx = (camera.viewportWidth / 2 + 240) * (time - 1) - camera.viewportWidth / 2 - 50;
-		float gmy = -400;
-		float gms = 100;
-		sb.draw(gmail, gmx - gms / 2, gmy - gms / 2, gms, gms);
+//		float gmx = (camera.viewportWidth / 2 + 240) * (time - 1) - camera.viewportWidth / 2 - 50;
+//		float gmy = -400;
+//		float gms = 100;
+//		sb.draw(gmail, gmx - gms / 2, gmy - gms / 2, gms, gms);
 		sb.end();
 
 		if (Input.isTouched() && b) {
@@ -206,9 +206,9 @@ public class Menu extends Screen {
 //			if (Util.getDistance(Input.getX(), Input.getY(), fbx, fby) < ss) {
 //				Gdx.net.openURI("https://plus.google.com/b/118229655643207624881/118229655643207624881/posts");
 //			}
-			if (Util.getDistance(Input.getX(), Input.getY(), gmx, gmy) < ss) {
-				Gdx.net.openURI("mailto:flash13records@gmail.com");
-			}
+//			if (Util.getDistance(Input.getX(), Input.getY(), gmx, gmy) < ss) {
+//				Gdx.net.openURI("mailto:flash13records@gmail.com");
+//			}
 		} else if (!Input.isTouched() && !b) {
 			b = true;
 		}
