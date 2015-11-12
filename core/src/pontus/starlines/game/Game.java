@@ -53,9 +53,9 @@ public class Game extends Screen {
 		LevelHandler.addLevel(new Level007(), new Point(2, 1), 0);
 
 		
-		Parser.parse("levels");
+//		Parser.parse("levels");
 
-		LevelHandler.selected = LevelHandler.levels.size() - 1;
+//		LevelHandler.selected = LevelHandler.levels.size() - 1;
 		
 		cursorX = LevelHandler.getSelected().cursorX;
 		cursorY = LevelHandler.getSelected().cursorY;
