@@ -1,11 +1,13 @@
 package pontus.starlines.menu;
 
 import pontus.starlines.JustDont;
+import pontus.starlines.JustDont.OS;
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.Screen;
 import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.core.math.Util;
 import pontus.starlines.game.Colors;
+import pontus.starlines.game.Game;
 import pontus.starlines.prepare.LevelSelection;
 
 import com.badlogic.gdx.Gdx;
@@ -13,7 +15,10 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Menu extends Screen {
 
@@ -187,33 +192,77 @@ public class Menu extends Screen {
 		float ss = 50;
 		sb.draw(googleplus, gpx - ss, gpy - ss, ss * 2, ss * 2);
 
-//		float fbx = (camera.viewportWidth / 2 + 50) * (time - 1) - camera.viewportWidth / 2 - 50;
-//		float fby = -400;
-//		float fbs = 50;
-//		sb.draw(facebook, fbx - fbs, fby - fbs, fbs * 2, fbs * 2);
+		// float fbx = (camera.viewportWidth / 2 + 50) * (time - 1) -
+		// camera.viewportWidth / 2 - 50;
+		// float fby = -400;
+		// float fbs = 50;
+		// sb.draw(facebook, fbx - fbs, fby - fbs, fbs * 2, fbs * 2);
 
-//		float gmx = (camera.viewportWidth / 2 + 240) * (time - 1) - camera.viewportWidth / 2 - 50;
-//		float gmy = -400;
-//		float gms = 100;
-//		sb.draw(gmail, gmx - gms / 2, gmy - gms / 2, gms, gms);
+		// float gmx = (camera.viewportWidth / 2 + 240) * (time - 1) -
+		// camera.viewportWidth / 2 - 50;
+		// float gmy = -400;
+		// float gms = 100;
+		// sb.draw(gmail, gmx - gms / 2, gmy - gms / 2, gms, gms);
 		sb.end();
 
 		if (Input.isTouched() && b) {
-			b =false;
+			b = false;
 			if (Util.getDistance(Input.getX(), Input.getY(), gpx, gpy) < ss) {
 				Gdx.net.openURI("https://plus.google.com/b/118229655643207624881/118229655643207624881/posts");
 			}
-//			if (Util.getDistance(Input.getX(), Input.getY(), fbx, fby) < ss) {
-//				Gdx.net.openURI("https://plus.google.com/b/118229655643207624881/118229655643207624881/posts");
-//			}
-//			if (Util.getDistance(Input.getX(), Input.getY(), gmx, gmy) < ss) {
-//				Gdx.net.openURI("mailto:flash13records@gmail.com");
-//			}
+			// if (Util.getDistance(Input.getX(), Input.getY(), fbx, fby) < ss)
+			// {
+			// Gdx.net.openURI("https://plus.google.com/b/118229655643207624881/118229655643207624881/posts");
+			// }
+			// if (Util.getDistance(Input.getX(), Input.getY(), gmx, gmy) < ss)
+			// {
+			// Gdx.net.openURI("mailto:flash13records@gmail.com");
+			// }
 		} else if (!Input.isTouched() && !b) {
 			b = true;
 		}
 
+		if (!JustDont.RUN_GAME) {
+			sr.begin(ShapeType.Filled);
+			sr.setColor(Color.BLACK);
+			sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
+			sr.end();
+
+			sb.begin();
+			{
+				font.setColor(Color.WHITE);
+				font.getData().setScale(0.40f);
+				GlyphLayout l = new GlyphLayout();
+				l.setText(Game.font, "This version is out of date!");
+				font.draw(sb, "This version is out of date!", 0 - l.width / 5, 100);
+			}
+			sb.end();
+
+			sr.begin(ShapeType.Filled);
+			setColor(Color.WHITE, Color.GRAY);
+			rect(-150, -150, 300, 100);
+			sr.end();
+
+			sb.begin();
+			{
+				font.setColor(Color.BLACK);
+				font.getData().setScale(0.8f);
+				GlyphLayout l = new GlyphLayout();
+				l.setText(Game.font, "OK");
+				font.draw(sb, "OK", 0 - l.width / 3, -80);
+			}
+			sb.end();
+
+			if (new Rectangle(-150, -150, 300, 100).contains(Input.getX(), Input.getY()) && Input.isTouched()) {
+				if (JustDont.currentOS == OS.WINDOWS) System.exit(0);
+				if (JustDont.currentOS == OS.ANDROID) Gdx.app.exit();
+			}
+
+		}
+
 	}
+
+	BitmapFont font = new BitmapFont(Gdx.files.internal("test.bmf"), Gdx.files.internal("test_00.png"), false);
 
 	private boolean b = false;
 	private boolean play = false;

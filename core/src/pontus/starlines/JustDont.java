@@ -1,19 +1,17 @@
 package pontus.starlines;
 
-import java.time.LocalDate;
+import java.util.Calendar;
 
 import javax.swing.JOptionPane;
-
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.game.Game;
 import pontus.starlines.menu.Menu;
 import pontus.starlines.prepare.LevelSelection;
+
+import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Gdx;
 
 public class JustDont implements ApplicationListener {
 
@@ -24,34 +22,37 @@ public class JustDont implements ApplicationListener {
 		WINDOWS, ANDROID, IOS
 	}
 
-
 	public static OS currentOS = OS.WINDOWS;
 
+	public static boolean RUN_GAME = true;
+	
 	@Override
 	public void create() {
 
-		System.out.println(LocalDate.now() + " : " + LocalDate.of(2015, 11, 16));
+		int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
+		int month = Calendar.getInstance().get(Calendar.MONTH) + 1;
+		int year = Calendar.getInstance().get(Calendar.YEAR);
+		System.out.println("Date: " + year + "-" + month + "-" + day);
 
-		int year = 2015;
-		int month = 11;
-		int day = 16;
+		int y = 2015;
+		int m = 11;
+		int d = 16;
 
-		int yearDiff = LocalDate.now().getYear() - year;
-		int monthDiff = LocalDate.now().getMonthValue() - month;
-		int dayDiff = LocalDate.now().getDayOfMonth() - day;
+		int t = (year - y) * 365 + (month - m) * (365 / 12) + (day - d);
 
-		if (yearDiff >= 0 && monthDiff >= 0 && dayDiff >= 0) {
+		System.out.println("Years left: " + (year - y) + " Months left: " + (month - m) + " Days left: " + (day - d) + ", Total Days left: " + t);
+
+		if (t >= 0) {
 			if (currentOS == OS.ANDROID) {
-				System.exit(0);
+				System.out.println("OS: Android");
+				RUN_GAME = false;
 			} else if (currentOS == OS.WINDOWS) {
-				JOptionPane.showMessageDialog(null, "This is just the beta and won't be playable from now on!", "Beta no longer valid!", JOptionPane.ERROR_MESSAGE);
-				System.exit(0);
+				System.out.println("OS: Windows");
+				RUN_GAME = false;
+//				JOptionPane.showMessageDialog(null, "This is just the beta and won't be playable from now on!", "Beta no longer valid!", JOptionPane.ERROR_MESSAGE);
+//				System.exit(0);
 			}
-		} else {
-			System.out.println("CAN RUN GAME");
 		}
-
-		System.out.println(yearDiff + " " + monthDiff + " " + dayDiff);
 
 		ScreenManager.add(new Game());
 		ScreenManager.add(new Menu());
@@ -62,11 +63,11 @@ public class JustDont implements ApplicationListener {
 		Gdx.input.setInputProcessor(new Input());
 	}
 
+
 	@Override
 	public void render() {
 		Input.update();
 		ScreenManager.render(Gdx.graphics.getDeltaTime());
-
 	}
 
 	@Override
