@@ -23,6 +23,8 @@ public class Level {
 	
 	public float cursorX = 0, cursorY = 100;
 	
+	public ArrayList<Point> actualStars = new ArrayList<Point>();
+	
 	public Point[] stars = new Point[3];
 	
 	public ArrayList<Line> walls = new ArrayList<Line>();
@@ -30,13 +32,20 @@ public class Level {
 	public void addWall(Line wall) {
 		walls.add(wall);
 	}
-	
+	float time = 0;
+
 	public void reset() {
+		time = 0;
+		
+		for (int i = 0; i < actualStars.size(); i++) {
+			stars[i] = actualStars.get(i);
+		}
 		
 	}
 	
 	public void render(SpriteBatch sb, float delta) {
-		
+		time += delta;
+
 	}
 	
 	public void drawText(SpriteBatch sb, String text, float x, float y) {

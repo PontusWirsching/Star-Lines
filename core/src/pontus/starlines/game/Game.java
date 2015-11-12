@@ -2,6 +2,18 @@ package pontus.starlines.game;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
+import com.badlogic.gdx.math.Circle;
+import com.badlogic.gdx.math.Polygon;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+
 import pontus.starlines.JustDont;
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.Screen;
@@ -16,39 +28,34 @@ import pontus.starlines.game.level.levels.Level003;
 import pontus.starlines.game.level.levels.Level004;
 import pontus.starlines.game.level.levels.Level005;
 import pontus.starlines.game.level.levels.Level006;
+import pontus.starlines.game.level.levels.Level007;
 import pontus.starlines.game.particles.ParticleHandler;
 import pontus.starlines.game.particles.StarSplash;
 import pontus.starlines.game.particles.Trail;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
-import com.badlogic.gdx.math.Circle;
-import com.badlogic.gdx.math.Polygon;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 
 public class Game extends Screen {
 
 	public static BitmapFont font = new BitmapFont(Gdx.files.internal("test.bmf"), Gdx.files.internal("test_00.png"), false);
 
 	
+	
 	public Game() {
 		super("GAME");
 
+		
+		
 		LevelHandler.addLevel(new Level001(), new Point(0, 0), 0);
 		LevelHandler.addLevel(new Level002(), new Point(1, 0), 0);
 		LevelHandler.addLevel(new Level003(), new Point(2, 0), 0);
 		LevelHandler.addLevel(new Level004(), new Point(3, 0), 0);
 		LevelHandler.addLevel(new Level005(), new Point(0, 1), 0);
 		LevelHandler.addLevel(new Level006(), new Point(1, 1), 0);
+		LevelHandler.addLevel(new Level007(), new Point(2, 1), 0);
 
+		
+		Parser.parse("levels");
 
-		LevelHandler.selected = 5;
+		LevelHandler.selected = LevelHandler.levels.size() - 1;
 		
 		cursorX = LevelHandler.getSelected().cursorX;
 		cursorY = LevelHandler.getSelected().cursorY;
@@ -84,7 +91,7 @@ public class Game extends Screen {
 		if (Gdx.input.isKeyPressed(Keys.SPACE) && t) {
 			t = false;
 			
-			LevelHandler.levels.set(LevelHandler.selected, new Level006());
+			LevelHandler.levels.set(LevelHandler.selected, new Level007());
 			
 		} else if (!Gdx.input.isKeyPressed(Keys.SPACE) && !t) {
 			t = true;
@@ -108,6 +115,7 @@ public class Game extends Screen {
 				show = false;
 			}
 
+//			canMove = true;
 			
 			if (!show) {
 				wallAlpha -= delta * 2;

@@ -1,0 +1,10 @@
+<levels>
+	<level name="Level - 8" start="-200 -450 400 100" finnish="0 400 50">
+		<wall p1="0 30" p2="100 100"></wall>
+		<wall p1="0 30" p2="-100 -100"></wall>
+		
+		<star p="0 0"></star>
+				<star p="100 0"></star>
+		
+	</level>
+</levels>
