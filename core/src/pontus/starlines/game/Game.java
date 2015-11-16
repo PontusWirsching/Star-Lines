@@ -21,6 +21,7 @@ import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.core.math.Line;
 import pontus.starlines.core.math.Point;
 import pontus.starlines.core.math.Util;
+import pontus.starlines.core.sound.SoundEffects;
 import pontus.starlines.game.level.LevelHandler;
 import pontus.starlines.game.level.levels.Level001;
 import pontus.starlines.game.level.levels.Level002;
@@ -139,6 +140,7 @@ public class Game extends Screen {
 				if (Util.getDistance(cursorX, cursorY, p.x, p.y) < 50) {
 					LevelHandler.getSelected().stars[i] = null;
 					stars++;
+					SoundEffects.PICKUP_STAR.play();
 					for (int j = 0; j < 10; j++) {
 						ParticleHandler.spawn(new StarSplash(p.x, p.y, this));
 					}
@@ -189,6 +191,7 @@ public class Game extends Screen {
 					cursorY += Math.sin(Math.toRadians(angle));
 
 					if (collision) {
+						SoundEffects.HIT_WALL.play();
 						dead = true;
 						cursorX -= Math.cos(Math.toRadians(angle));
 						cursorY -= Math.sin(Math.toRadians(angle));
@@ -204,6 +207,17 @@ public class Game extends Screen {
 
 					if (Util.getDistance(cursorX, cursorY, c.x, c.y) < c.radius) {
 						win = true;
+						
+						if (stars == 0) {
+							SoundEffects.NO_STARS.play();
+						}
+						if (stars > 0 && stars <= 2) {
+							SoundEffects.ONE_TWO_STARS.play();
+						}
+						if (stars > 2) {
+							SoundEffects.THREE_STARS.play();
+						}
+						
 					}
 
 					cursorX = LevelHandler.getSelected().cursorX;
