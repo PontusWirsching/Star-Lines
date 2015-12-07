@@ -103,7 +103,7 @@ public class Game extends Screen {
 		Gdx.gl.glClearColor(Colors.OUT_OF_SCREEN.r, Colors.OUT_OF_SCREEN.g, Colors.OUT_OF_SCREEN.b, Colors.OUT_OF_SCREEN.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		sr.begin(ShapeType.Filled);
+		sr.begin(ShapeType.Line);
 		{
 			sr.setColor(Colors.BACKGROUND);
 			sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
@@ -116,7 +116,7 @@ public class Game extends Screen {
 				show = false;
 			}
 
-//			canMove = true;
+			canMove = true;
 			
 			if (!show) {
 				wallAlpha -= delta * 2;
@@ -180,7 +180,7 @@ public class Game extends Screen {
 						sr.setColor(Color.YELLOW);
 						float[] f = new float[] { (float) wall.getX1() + 5, (float) wall.getY1() - 5, (float) wall.getX1() - 5, (float) wall.getY1() + 5, (float) wall.getX2() - 5, (float) wall.getY2() + 5, (float) wall.getX2() + 5, (float) wall.getY2() - 5 };
 						Polygon p = new Polygon(f);
-//						sr.polygon(f);
+						sr.polygon(f);
 						if (p.contains(cursorX, cursorY)) {
 							collision = true;
 						}
