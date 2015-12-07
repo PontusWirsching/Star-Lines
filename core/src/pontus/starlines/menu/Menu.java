@@ -41,6 +41,11 @@ public class Menu extends Screen {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		sr.begin(ShapeType.Filled);
+		sr.setColor(Color.BLACK);
+		sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
+		sr.end();
+		
+		sr.begin(ShapeType.Filled);
 		sr.setColor(Colors.BACKGROUND);
 		sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
 		if (play) {
@@ -55,6 +60,8 @@ public class Menu extends Screen {
 			time += delta * 3;
 			if (time >= 2) time = 2;
 		}
+		
+		
 		if (time > 0) {
 			float t = 25;
 

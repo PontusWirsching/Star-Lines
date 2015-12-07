@@ -13,6 +13,12 @@ import pontus.starlines.prepare.LevelSelection;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 
+/**
+ * Dont freakin steal it!
+ * 
+ * @author Pontus Wirsching
+ *
+ */
 public class JustDont implements ApplicationListener {
 
 	public static final float WIDTH = 1080 / 2;
@@ -35,8 +41,8 @@ public class JustDont implements ApplicationListener {
 		System.out.println("Date: " + year + "-" + month + "-" + day);
 
 		int y = 2015;
-		int m = 11;
-		int d = 16;
+		int m = 12;
+		int d = 17;
 
 		int t = (year - y) * 365 + (month - m) * (365 / 12) + (day - d);
 
