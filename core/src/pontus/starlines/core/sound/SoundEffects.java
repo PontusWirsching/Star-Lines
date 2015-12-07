@@ -33,7 +33,7 @@ public enum SoundEffects {
 	/**
 	 * Play volume for this sound.
 	 */
-	private float volume = 1.0f;
+	private float volume = 0.25f;
 	
 	/**
 	 * 

@@ -56,7 +56,7 @@ public class Game extends Screen {
 		
 //		Parser.parse("levels");
 
-//		LevelHandler.selected = LevelHandler.levels.size() - 1;
+		LevelHandler.selected = LevelHandler.levels.size() - 1;
 		
 		cursorX = LevelHandler.getSelected().cursorX;
 		cursorY = LevelHandler.getSelected().cursorY;
@@ -103,6 +103,11 @@ public class Game extends Screen {
 		Gdx.gl.glClearColor(Colors.OUT_OF_SCREEN.r, Colors.OUT_OF_SCREEN.g, Colors.OUT_OF_SCREEN.b, Colors.OUT_OF_SCREEN.a);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+//		sr.begin(ShapeType.Filled);
+//		sr.setColor(Color.BLACK);
+//		sr.rect(-JustDont.WIDTH / 2, -JustDont.HEIGHT / 2, JustDont.WIDTH, JustDont.HEIGHT);
+//		sr.end();
+		
 		sr.begin(ShapeType.Filled);
 		{
 			sr.setColor(Colors.BACKGROUND);
@@ -178,7 +183,13 @@ public class Game extends Screen {
 					for (Line wall : walls) {
 
 						sr.setColor(Color.YELLOW);
-						float[] f = new float[] { (float) wall.getX1() + 5, (float) wall.getY1() - 5, (float) wall.getX1() - 5, (float) wall.getY1() + 5, (float) wall.getX2() - 5, (float) wall.getY2() + 5, (float) wall.getX2() + 5, (float) wall.getY2() - 5 };
+						
+						double a = Util.getAngle(wall.getX1(), wall.getY1(), wall.getX2(), wall.getY2());
+						
+						float xm = (float) (Math.cos(Math.toRadians(a)) * 5);
+						float ym = (float) (Math.sin(Math.toRadians(a)) * 5);
+
+						float[] f = new float[] { (float) wall.getX1() + xm, (float) wall.getY1() - ym, (float) wall.getX1() - xm, (float) wall.getY1() + ym, (float) wall.getX2() - xm, (float) wall.getY2() + ym, (float) wall.getX2() + xm, (float) wall.getY2() - ym };
 						Polygon p = new Polygon(f);
 //						sr.polygon(f);
 						if (p.contains(cursorX, cursorY)) {
