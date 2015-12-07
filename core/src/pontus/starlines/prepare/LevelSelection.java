@@ -71,13 +71,7 @@ public class LevelSelection extends Screen {
 				float yy = (y * size * space - size * space * h / 2) * time;
 				rect(xx, yy, size, size);
 
-				if (Input.isTouched()) {
-					if (new Rectangle(xx, yy, size, size).contains(Input.getX(), Input.getY())) {
-						play = true;
-						sel = cc;
-					}
-				}
-				cc++;
+				
 
 				if (levels[0][x][h - y - 1] == 0) {
 
@@ -95,6 +89,15 @@ public class LevelSelection extends Screen {
 					setColor(Color.WHITE, Color.GRAY);
 					rect(xx + size / 3 / 2, yy + size / 3 / 2, size / 1.5f, 50);
 				}
+
+				if (Input.isTouched()) {
+					if (new Rectangle(xx, yy, size, size).contains(Input.getX(), Input.getY())) {
+						if (levels[0][x][h - y - 1] == 0) continue;
+						play = true;
+						sel = cc;
+					}
+				}
+				cc++;
 
 			}
 		}
