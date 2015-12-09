@@ -2,8 +2,6 @@ package pontus.starlines;
 
 import java.util.Calendar;
 
-import javax.swing.JOptionPane;
-
 import pontus.starlines.core.Input;
 import pontus.starlines.core.graphics.ScreenManager;
 import pontus.starlines.game.Game;
@@ -42,11 +40,7 @@ public class JustDont implements ApplicationListener {
 
 		int y = 2015;
 		int m = 12;
-<<<<<<< HEAD
 		int d = 24;
-=======
-		int d = 17;
->>>>>>> origin/master
 
 		int t = (year - y) * 365 + (month - m) * (365 / 12) + (day - d);
 
